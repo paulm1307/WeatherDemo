@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import UIKit
 
 protocol NetworkManagerConformable: Actor {
     func weather(city: String) async throws -> WeatherResponse
     func weather(lat: Double, lng: Double) async throws -> WeatherResponse
-    func icon(id: String) async throws -> UIImage
+    func icon(id: String) async throws -> Data
 }
 
 actor NetworkManager: NetworkManagerConformable {
@@ -40,6 +39,7 @@ actor NetworkManager: NetworkManagerConformable {
         var urlString = "https://api.openweathermap.org/data/2.5/weather"
         urlString += "?appid=52b53c97712bbee042d3c6d7166a713a"
         urlString += "&q=\(city)"
+        urlString += "&units=imperial"
         
         print(urlString)
         
@@ -63,6 +63,7 @@ actor NetworkManager: NetworkManagerConformable {
         urlString += "?appid=52b53c97712bbee042d3c6d7166a713a"
         urlString += "&lat=\(lat)"
         urlString += "&lon=\(lng)"
+        urlString += "&units=imperial"
         
         print(urlString)
         
@@ -81,7 +82,7 @@ actor NetworkManager: NetworkManagerConformable {
         return try decoder.decode(WeatherResponse.self, from: data)
     }
     
-    func icon(id: String) async throws -> UIImage {
+    func icon(id: String) async throws -> Data {
         let urlString = "https://openweathermap.org/img/wn/\(id)@2x.png"
         
         print(urlString)
@@ -97,10 +98,7 @@ actor NetworkManager: NetworkManagerConformable {
         guard (200...299).contains(urlResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
-        guard let image = UIImage(data: data) else {
-            throw URLError(.cannotDecodeRawData)
-        }
-        return image
+        return data
     }
     
 }

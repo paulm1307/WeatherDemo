@@ -45,6 +45,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		020BA0192A2E3CE600A1B8F0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0DC629022A12A6EE00605765 /* WeatherResponse.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		020BA01A2A2E3CEF00A1B8F0 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0DC628FC2A129F2900605765 /* ViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		020BA01B2A2E3CF400A1B8F0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0DC628EC2A129EB500605765 /* ViewController.swift */,
+				0DC629042A12AAA200605765 /* WeatherView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		020BA01C2A2E3D1100A1B8F0 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				0DC628FE2A12A04800605765 /* NetworkManager.swift */,
+				0DC629002A12A05300605765 /* LocationManager.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		0DC628DC2A129EB500605765 = {
 			isa = PBXGroup;
 			children = (
@@ -64,14 +98,12 @@
 		0DC628E72A129EB500605765 /* PaulMolinariWeatherDemo */ = {
 			isa = PBXGroup;
 			children = (
+				020BA01C2A2E3D1100A1B8F0 /* Service */,
+				020BA01B2A2E3CF400A1B8F0 /* View */,
+				020BA01A2A2E3CEF00A1B8F0 /* ViewModels */,
+				020BA0192A2E3CE600A1B8F0 /* Models */,
 				0DC628E82A129EB500605765 /* AppDelegate.swift */,
 				0DC628EA2A129EB500605765 /* SceneDelegate.swift */,
-				0DC628EC2A129EB500605765 /* ViewController.swift */,
-				0DC628FC2A129F2900605765 /* ViewModel.swift */,
-				0DC628FE2A12A04800605765 /* NetworkManager.swift */,
-				0DC629002A12A05300605765 /* LocationManager.swift */,
-				0DC629022A12A6EE00605765 /* WeatherResponse.swift */,
-				0DC629042A12AAA200605765 /* WeatherView.swift */,
 				0DC628F12A129EB700605765 /* Assets.xcassets */,
 				0DC628F32A129EB700605765 /* LaunchScreen.storyboard */,
 				0DC628F62A129EB700605765 /* Info.plist */,

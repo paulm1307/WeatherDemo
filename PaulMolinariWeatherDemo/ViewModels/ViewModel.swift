@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import UIKit
 
 actor ViewModel: ObservableObject {
     
     @MainActor @Published var cityName: String = "San Diego"
-    @MainActor @Published var icon: UIImage?
+    @MainActor @Published var iconData: Data?
     
     static func mock() -> ViewModel {
         let networkManager = NetworkManager()
@@ -30,8 +29,7 @@ actor ViewModel: ObservableObject {
         self.locationManager = locationManager
         
         Task { @MainActor in
-            cityName = UserDefaults.standard.string(forKey: "city_name") ?? ""
-            if cityName.count <= 0 { cityName = "San Diego" }
+            cityName = UserDefaults.standard.string(forKey: "city_name") ?? "San Diego"
             locationManager.delegate = self
             await downloadWeather(city: cityName)
         }
@@ -41,10 +39,9 @@ actor ViewModel: ObservableObject {
         if let weatherResponse = await weatherResponse, let weather = weatherResponse.weather {
             for _weather in weather {
                 do {
-                    let image = try await networkManager.icon(id: _weather.icon)
+                    let data = try await networkManager.icon(id: _weather.icon)
                     await MainActor.run {
-                        self.icon = image
-                        print("image \(image.size.width) x \(image.size.height)")
+                        self.iconData = data
                     }
                     return
                 } catch let error {
@@ -101,40 +98,30 @@ actor ViewModel: ObservableObject {
     }
     
     @MainActor func temperature() -> String? {
-        if let temp = weatherResponse?.main?.temp {
-            let farenheit = (temp - 273.15) * 9.0 / 5.0 + 32.0
-            return String(format: "%.1fºF", farenheit)
-        }
-        return nil
+        guard let temp = weatherResponse?.main?.temp else { return nil }
+        return String(format: "%.1fºF", temp)
     }
     
     @MainActor func humidity() -> String? {
-        if let humidity = weatherResponse?.main?.humidity {
-            return String(format: "%.1f%%", humidity)
-        }
-        return nil
+        guard let humidity = weatherResponse?.main?.humidity else { return nil }
+        return String(format: "%.1f%%", humidity)
     }
     
     @MainActor func visibility() -> String? {
-        if let visibility = weatherResponse?.visibility {
-            let miles = visibility * 0.000621371
-            return String(format: "%.1f mi", miles)
-        }
-        return nil
+        guard let visibility = weatherResponse?.visibility else { return nil }
+        let miles = visibility * 0.000621371
+        return String(format: "%.1f mi", miles)
     }
     
     @MainActor func pressure() -> String? {
-        if let pressure = weatherResponse?.main?.pressure {
-            let ppsf = pressure * 2.08854
-            return String(format: "%.1f lb/sq. ft", ppsf)
-        }
-        return nil
+        guard let pressure = weatherResponse?.main?.pressure else { return nil }
+        return String(format: "%.1f hPa", pressure)
     }
 }
 
 extension ViewModel: LocationManagerDelegate {
     nonisolated func locationDidFail() {
-        
+        // TODO: Implement some fail handling
     }
     
     nonisolated func locationDidUpdate(lat: Double, lng: Double) {

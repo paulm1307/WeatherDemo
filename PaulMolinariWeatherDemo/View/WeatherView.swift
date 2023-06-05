@@ -10,7 +10,7 @@ import SwiftUI
 struct WeatherView: View {
     @ObservedObject var viewModel: ViewModel
     var body: some View {
-        VStack(spacing: 0.0) {
+        VStack() {
             HStack {
                 HStack {
                     Spacer()
@@ -45,7 +45,7 @@ struct WeatherView: View {
     func mainBody() -> some View {
         VStack {
             ZStack {
-                if let image = viewModel.icon {
+                if let iconData = viewModel.iconData, let image = UIImage(data: iconData) {
                     Image(uiImage: image)
                         .resizable()
                         .frame(width: 50.0, height: 50.0)
